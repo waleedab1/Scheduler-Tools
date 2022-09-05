@@ -1,0 +1,42 @@
+.CreateSchedule-page-wrapper {
+    background-color: rgb(74, 28, 83);
+    padding: 5px;
+}
+
+.CreateSchedule-page-components {
+    margin: 20px;
+}
+
+.CreateSchedule-page-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.CreateSchedule-page-header-icon {
+    margin: 5px;
+    color: silver;
+}
+
+.CreateSchedule-page-header-text {
+    color: silver;
+}
+
+.CreateSchedule-page-divider {
+    display: inline-block;
+    width: 4px;
+    background-color: silver;
+    margin: 0 30px;
+    height: auto;
+  }
+
+.CreateSchedule-page-content {
+    display: flex;
+    flex-direction: row;
+}
+
+.CreateSchedule-page-loading {
+    width: 1450px;
+    justify-content: center;
+    color: white;
+}

@@ -1,0 +1,59 @@
+.home-page-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: black;
+    height:733px;
+}
+
+.home-page-side1 {
+    width: 800px;
+    justify-content: center;
+    background-color: rgb(1, 126, 126);
+}
+
+.home-page-side1:hover {
+    background-color: rgb(22, 95, 95);
+}
+
+.home-page-side2 {
+    width: 800px;
+    justify-content: center;
+    background-color: rgb(168, 54, 190);
+}
+
+.home-page-side2:hover {
+    background-color: rgb(74, 28, 83);
+}
+
+.home-page-icon1 {
+    margin: 200px;
+}
+
+.home-page-icon2 {
+    margin: 200px;
+}
+
+.home-page-text1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+}
+
+.home-page-text2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+    margin-right: 35px;
+}
+
+.home-page-link {
+    color: silver;
+    text-decoration: none;
+}
+
+.home-page-link:hover {
+    color: black;
+}
