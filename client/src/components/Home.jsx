@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { IoCreateOutline } from 'react-icons/io5';
 
-import './Home.css';
+import './styles/Home.css';
 
 const Home = () => {
   return (

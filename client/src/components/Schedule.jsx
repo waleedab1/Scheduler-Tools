@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import './Schedule.css';
+import './styles/Schedule.css';
 
 import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 

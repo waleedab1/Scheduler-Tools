@@ -1,0 +1,69 @@
+.export-page-wrapper {
+    display: block;
+    width: auto;
+    height: 733px;
+    background-color: rgb(22, 95, 95);
+}
+
+.export-top-bar-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: steelblue;
+    border: 2px solid black;
+}
+
+
+.export-top-bar-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 5px;
+}
+
+.export-top-bar-item {
+    margin: 5px;
+}
+
+.export-top-bar-button {
+    margin: 5px;
+    size: 5px;
+}
+
+.export-input {
+    margin: 5px;
+    align-items: center;
+    background-color: cadetblue;
+    border: 2px solid steelblue;
+    border-radius: 5px;
+    color: wheat;
+}
+
+.export-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 40px;
+    height: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+.export-button-disabled {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 40px;
+    height: 20px;
+    color: darkgray;
+}
+
+.export-reload-icon {
+    margin: 5px;
+}
+
+.export-button-export {
+    border: 2px solid black;
+    border-radius: 8px;
+    margin-left: 10px;
+}

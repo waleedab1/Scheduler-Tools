@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import './ScheduleForm.css';
+import './styles/ScheduleForm.css';
 
 const axios = require('axios');
 

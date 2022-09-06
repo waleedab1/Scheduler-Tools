@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaTools } from 'react-icons/fa';
 
-import './NavMenu.css';
+import './styles/NavMenu.css';
 
 function NavMenu() {
     return (

@@ -1,56 +1,158 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import './ExportSchedule.css';
+import './styles/ExportSchedule.css';
 
 import Selecto from "react-selecto";
+import Table from './Table';
+import { IoReloadCircleSharp } from 'react-icons/io5';
 
-const NodeItem = ({ x, y, data }) => {
+const values = { lateralInput: 18, segmentInput: 35 };
 
-  return (
-    <div className='target' x={x} y={y}>
-      <p className='node-item-input'>{data}</p>
-    </div>
-  );
-}
+const ExportTopBar = ({ data, segments, laterals, setLaterals, setSegments }) => {
+  const [disabled, setDisabled] = useState(true);
+  const [form, setForm] = useState(values);
 
-const Row = ({ segments }) => {
+  useEffect(() => {
+    if (form.segmentInput !== undefined && form.lateralInput !== undefined && form.lateralInput > 0 && form.segmentInput > 0)
+      setDisabled(false);
+    else
+      setDisabled(true);
+  }, [form]);
 
-  return (
-    <div className='row-wrapper'>
-      {
-        segments.map((e) => {
-          return (<NodeItem key={e.x+','+e.y} y={e.y} x={e.x} data={e.data}/>);
-        })
+  useEffect(() => {
+    setDisabled(true);
+  }, []);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  const handleSubmit = (event) => {
+    if (!disabled) {
+      event.preventDefault();
+      setSegments(form.segmentInput);
+      setLaterals(form.lateralInput);
+      setDisabled(true);
+    }
+  }
+
+  const exportJson = async () => {
+    let jsonToExport = createJson();
+    let now = new Date();
+    const fileName = "application_"+now.toLocaleDateString()+"_"+now.toLocaleTimeString();
+    const json = JSON.stringify(jsonToExport);
+    const blob = new Blob([json], {type: 'application/json'});
+    const href = await URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.download = fileName + ".json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const isLateralEmpty = (lateral) => {
+    return data.filter((e) => e.y === lateral).filter((e) => e.data !== '').length === 0;
+  }
+
+  const createLaterals = (dateTime) => {
+    const lateralsArr = []
+    for (let i = 0; i < laterals; i++) {
+      if (!isLateralEmpty(i)) {
+        let lateral = {
+          "id": i,
+          "order": i,
+          "creationTime": dateTime,
+          "segments": createSegements(i, dateTime),
+        }
+        lateralsArr.push(lateral);
       }
+    }
+    return lateralsArr;
+  }
+
+  const createSegements = (lateral, dateTime) => {
+    const segementsArr = []
+    for (let i = 0; i < segments; i++) {
+      let element = data.find((e) => (e.y === lateral && e.x === i));
+      if (element !== undefined) {
+        if (element.data !== '') {
+          let segement = {
+            "id": i,
+            "order": i,
+            "creationTime": dateTime,
+            "value": element.data
+          }
+          segementsArr.push(segement);
+        }
+      }
+    }
+    return segementsArr;
+  }
+
+  const getDateTime = () => {
+    const today = Date.now()
+    return '' + new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(today)
+  }
+
+  const createJson = () => {
+    const blockId = 1;
+    const dateTime = getDateTime();
+    let application = {
+      "id": 1,
+      "creationTime": dateTime,
+      "status": "Enabled",
+      "blocks": [
+        {
+          "id": blockId,
+          "order": blockId,
+          "creationTime": dateTime,
+          "laterals": createLaterals(dateTime),
+        }
+      ],
+    };
+    return application;
+  }
+
+  return (
+    <div className='export-top-bar-wrapper'>
+      <div className='export-top-bar-items'>
+        <input value={form.lateralInput} className='export-input' name='lateralInput' type='number' placeholder='Number of Laterals' onChange={handleChange} />
+        <input value={form.segmentInput} className='export-input' name='segmentInput' type='number' placeholder='Number of Segments' onChange={handleChange} />
+        <div className={disabled ? 'export-button-disabled' : 'export-button'} onClick={handleSubmit}>
+          <IoReloadCircleSharp size='25px' className='export-reload-icon' />
+        </div>
+        <button className='export-button-export' onClick={exportJson}>Export</button>
+      </div>
     </div>
   );
 }
 
 const ExportSchedule = () => {
   const [loading, setLoading] = useState(true);
-  const [segments, setSegments] = useState(4);
-  const [laterals, setLaterals] = useState(10);
+  const [segments, setSegments] = useState(values.segmentInput);
+  const [laterals, setLaterals] = useState(values.lateralInput);
   const [data, setData] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  var selectedItems = [];
 
-  const initData = () => {
-    [...Array(segments).keys()].map((x) => {
-      return [...Array(laterals).keys()].map((y) => {
-      return data.push({x: x, y: y, data: x + ' ' + y})
-      });
-    });
+  useEffect(() => {
+    setLoading(true);
+    const arr = [];
+    for (let i = 0; i < laterals; i++) {
+      for (let j = 0; j < segments; j++) {
+        let element = data.find((e) => (e.x === j && e.y === i));
+        if (element !== undefined)
+          arr.push({ x: j, y: i, data: element.data });
+        else
+          arr.push({ x: j, y: i, data: '' });
+      }
+    }
+    setData([...arr]);
+  }, [segments, laterals]);
+
+  useEffect(() => {
     setLoading(false);
-  }
-
-  const displayData = () => {
-    console.log(data);
-  }
-
-  const getRow = (y) => {
-    let row = [];
-    data.map((e) => (e.y === y ? row.push(e) : ''));
-    return row;
-  }
+  }, [data]);
 
   const addSelected = (x, y) => {
     if (selectedItems.filter((e) => (e.x === x && e.y === y)).length === 0)
@@ -58,7 +160,7 @@ const ExportSchedule = () => {
   }
 
   const removeSelected = (x, y) => {
-    setSelectedItems([...selectedItems.filter((e) => !(e.x === x && e.y === y))]);
+    selectedItems = selectedItems.filter((e) => !(e.x === x && e.y === y));
   }
 
   const handleEnter = () => {
@@ -104,7 +206,7 @@ const ExportSchedule = () => {
           onSelect={e => {
             e.added.forEach(el => {
               el.classList.add("selected");
-              addSelected(parseInt(el.getAttribute('x')),parseInt(el.getAttribute('y')));
+              addSelected(parseInt(el.getAttribute('x')), parseInt(el.getAttribute('y')));
             });
             e.removed.forEach(el => {
               el.classList.remove("selected");
@@ -113,16 +215,10 @@ const ExportSchedule = () => {
           }}
         />
       </div>
-      <button onClick={initData}/>
-      <div>
-      {
-        loading ? 'Loading...' : 
-        [...Array(laterals).keys()].map((y) => {
-          return <Row segments={getRow(y)}/>
-        })
+      <ExportTopBar data={data} segments={segments} laterals={laterals} setLaterals={setLaterals} setSegments={setSegments} />
+      {loading ? 'Loading...' :
+        <Table key={laterals + ',' + segments} data={data} laterals={laterals} segments={segments} setLaterals={setLaterals} setSegments={setSegments} />
       }
-            <button onClick={displayData}/>
-      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { ScheduleForm, Schedule } from './'
 
 import { BsInfoCircleFill } from 'react-icons/bs';
 
-import './CreateSchedule.css';
+import './styles/CreateSchedule.css';
 
 const initialSchedule = {
   id: 0,
